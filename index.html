@@ -1,224 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingreso Inventario</title>
-    <link rel="icon" type="image/png" href="img/logoSR.png">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingreso Inventario</title>
+  <link rel="icon" type="image/png" href="img/logoSR.png?v=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  <script>
+    // Verificación de sesión segura
+    document.addEventListener('DOMContentLoaded', () => {
+      const userSession = JSON.parse(localStorage.getItem('userSession') || '{}');
+      if (!userSession.username) {
+        window.location.replace('login.html');
+      }
+    });
+  </script>
 </head>
+
 <body>
-    <div class="form-container">
-        <!-- Header con información de usuario y botón de cerrar sesión -->
-        <div class="user-header">
-            <div class="user-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            </div>
-            
-            <div class="user-info">
-              <div class="user-details">
-                  <span id="userName">Usuario</span>
-                  <span id="userRole">Cargo</span>
-                  <span id="userSede">Sede</span>
-              </div>
-          </div>
-            
-            <button class="logout-btn" id="logoutBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                Cerrar sesión
-            </button>
-        </div>
-
-        <!-- Title section -->
-        <div class="cabecera">
-            <h1 style="font-size: 1.5rem; color: #333; text-align: center; margin-bottom: 0.5rem;">Sistema de Inventario</h1>
-            <h2 style="color: #045af9; font-size: 1.2rem; text-align: center;">Ingreso de Inventario</h2>
-        </div>
-
-        <!-- Logo container -->
-        <div class="logo-container">
-            <img id="restaurantLogo" src="img/logoSR.png" alt="Logo" />
-        </div>
-        
-        <!-- Restaurant name -->
-        <div class="detalle">
-            <h2 id="restaurantName">
-                <span class="restaurant-label">Restaurante</span>
-                <span class="restaurant-name">La Portada Campestre</span>
-            </h2>
-            <h3>Año 2025</h3>
-        </div>
-
-        <!-- Formulario de ingreso de inventario -->
-        <div class="form-group">
-            <label for="tipoInventario">Tipo</label>
-            <select id="tipoInventario">
-                <option value="" disabled selected>Selecciona el tipo de inventario</option>
-            </select>
-            <div class="error-message" id="errorTipo">Por favor selecciona un tipo de inventario</div>
-        </div>
-
-        <div class="form-group">
-            <label for="categoria">Categoría</label>
-            <select id="categoria">
-                <option value="" disabled selected>Selecciona una categoría</option>
-            </select>
-            <div class="error-message" id="errorCategoria">Por favor selecciona una categoría</div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group half-width">
-                <label for="modelo">Modelo</label>
-                <select id="modelo">
-                    <option value="" disabled selected>Selecciona el modelo</option>
-                    <option value="UNIDAD">UNIDAD</option>
-                    <option value="LOTE">LOTES</option>
-                </select>
-                <div class="error-message" id="errorModelo">Por favor selecciona un modelo</div>
-            </div>
-
-            <div class="form-group half-width" id="loteSizeContainer" style="display: none;">
-                <label for="loteSize">Tipo de Lote</label>
-                <select id="loteSize">
-                    <option value="" disabled selected>Selecciona el tipo</option>
-                    <option value="12">LOTE x12</option>
-                    <option value="24">LOTE x24</option>
-                </select>
-                <div class="error-message" id="errorLoteSize">Por favor selecciona el tipo de lote</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="item">Item</label>
-            <select id="item" class="form-control" disabled>
-                <option value="" disabled selected>Selecciona un item</option>
-            </select>
-            <div class="error-message" id="errorItem">Por favor selecciona un item</div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group half-width">
-                <label for="cantidad">Cantidad</label>
-                <input type="number" id="cantidad" placeholder="0" min="0" step="0.01" />
-                <div class="error-message" id="errorCantidad">Por favor ingresa una cantidad válida</div>
-            </div>
-
-            <div class="form-group half-width">
-                <label for="factura">Factura</label>
-                <input type="text" id="factura" placeholder="Número de factura" />
-                <div class="error-message" id="errorFactura">Por favor ingresa el número de factura</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="responsable">Responsable</label>
-            <input type="text" id="responsable" placeholder="Nombre del responsable" />
-            <div class="error-message" id="errorResponsable">Por favor ingresa el nombre del responsable</div>
-        </div>
-
-        <div class="form-row date-row">
-          <div class="form-group date-field">
-              <label for="fechaVenc">Fecha de Vencimiento</label>
-              <input type="date" id="fechaVenc" />
-              <div class="error-message" id="errorFechaVenc">Por favor selecciona una fecha de vencimiento</div>
-          </div>
-          <div class="no-aplica-container">
-              <label class="no-aplica-label">
-                  <input type="checkbox" id="noAplicaFecha" />
-                  <span>NO APLICA</span>
-              </label>
-          </div>
+  <div class="form-container">
+    <!-- Header -->
+    <header class="user-header">
+      <div class="user-icon" aria-label="Icono de usuario">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
       </div>
-
-        <div class="form-group">
-            <label for="observaciones">Observaciones</label>
-            <textarea id="observaciones" rows="3" placeholder="Observaciones adicionales"></textarea>
+      <div class="user-info">
+        <div class="user-details">
+          <span id="userName">Usuario</span>
+          <span id="userRole">Cargo</span>
+          <span id="userSede">Sede</span>
         </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" style="background-color: #e53935 !important; color: white !important;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Cerrar sesión
+    </button>
+    </header>
 
-        <button id="guardarBtn">Guardar Ingreso</button>
+    <!-- Title -->
+    <section class="cabecera">
+      <h1>Sistema de Inventario</h1>
+      <h2>Ingreso de Inventario</h2>
+    </section>
+
+    <!-- Logo -->
+    <div class="logo-container">
+      <img id="restaurantLogo" src="img/logoSR.png" alt="Logo Restaurante" />
     </div>
 
-      <!-- Remove duplicate modals and keep only one set -->
-      <!-- Modal de Confirmación -->
-      <div id="confirmacion" class="modal">
-        <div class="modal-content">
-            <div id="content"></div>
-            <div class="modal-buttons">
-                <button id="confirmarBtn" class="btn-confirmar">Confirmar</button>
-                <button id="cancelarConfirmacionBtn" class="btn-cancelar">Cancelar</button>
-            </div>
+    <!-- Detalle -->
+    <div class="detalle">
+      <h2 id="restaurantName">
+        <span class="restaurant-label">Restaurante</span>
+        <span class="restaurant-name">La Portada Campestre</span>
+      </h2>
+      <h3>Año 2025</h3>
+    </div>
+
+    <!-- Formulario -->
+    <form id="inventarioForm" novalidate>
+      <div class="form-group">
+        <label for="tipoInventario">Tipo</label>
+        <select id="tipoInventario" required>
+          <option value="" disabled selected>Selecciona el tipo de inventario</option>
+        </select>
+        <div class="error-message" id="errorTipo">Por favor selecciona un tipo de inventario</div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoria">Categoría</label>
+        <select id="categoria" required>
+          <option value="" disabled selected>Selecciona una categoría</option>
+        </select>
+        <div class="error-message" id="errorCategoria">Por favor selecciona una categoría</div>
+      </div>
+
+      <div class="form-group">
+        <label for="item">Item</label>
+        <select id="item" disabled required>
+          <option value="" disabled selected>Selecciona un item</option>
+        </select>
+        <div class="error-message" id="errorItem">Por favor selecciona un item</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half-width">
+          <label for="modelo">Modelo</label>
+          <input type="text" id="modelo" placeholder="Nombre del modelo" required />
+          <div class="error-message" id="errorModelo">Por favor ingresa el nombre del modelo</div>
+        </div>
+
+        <div class="form-group half-width" id="presentacionContainer" style="display: none;">
+          <label for="presentacion">Presentación</label>
+          <select id="presentacion" disabled>
+            <option value="" disabled selected>Selecciona la presentación</option>
+          </select>
+          <div class="error-message" id="errorPresentacion">Por favor selecciona la presentación</div>
         </div>
       </div>
 
-      <!-- Modal de Salir -->
-      <div id="salir" class="modal">
-        <div class="modal-content">
-            <h3 class="modal-title">¿Deseas salir del sistema?</h3>
-            <div class="modal-body">
-                <p>Se cerrará tu sesión actual y perderás los datos no guardados.</p>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-primary" id="confirmarSalirBtn">Cerrar sesión</button>
-                <button class="btn-cancel" id="cancelarSalirBtn">Cancelar</button>
-            </div>
+      <div class="form-row">
+        <div class="form-group half-width">
+          <label for="cantidad">Cantidad</label>
+          <input type="number" id="cantidad" placeholder="0" min="0" step="0.01" required />
+          <div class="error-message" id="errorCantidad">Por favor ingresa una cantidad válida</div>
+        </div>
+
+        <div class="form-group half-width">
+          <label for="factura">Factura</label>
+          <input type="text" id="factura" placeholder="Número de factura" />
+          <div class="error-message" id="errorFactura">Por favor ingresa el número de factura</div>
         </div>
       </div>
 
-      <!-- Modal de Éxito -->
-      <div id="exito" class="modal">
-        <div class="modal-content">
-            <h2>¡Ingreso Registrado!</h2>
-            <p>El ingreso de inventario se ha registrado correctamente.</p>
-            <div class="modal-buttons">
-                <button id="nuevoIngresoBtn" class="btn">Nuevo Ingreso</button>
-                <button id="volverBtn" class="btn btn-secondary">Volver al Menú</button>
-            </div>
+      <div class="form-group">
+        <label for="responsable">Responsable</label>
+        <input type="text" id="responsable" placeholder="Nombre del responsable" required />
+        <div class="error-message" id="errorResponsable">Por favor ingresa el nombre del responsable</div>
+      </div>
+
+      <div class="form-row date-row">
+        <div class="form-group date-field">
+          <label for="fechaVenc">Fecha de Vencimiento</label>
+          <input type="date" id="fechaVenc" />
+          <div class="error-message" id="errorFechaVenc">Por favor selecciona una fecha de vencimiento</div>
+        </div>
+        <div class="no-aplica-container">
+          <label class="no-aplica-label">
+            <input type="checkbox" id="noAplicaFecha" />
+            <span>NO APLICA</span>
+          </label>
         </div>
       </div>
 
-      <!-- Confirmation Modal -->
-    <div id="confirmacion" class="modal">
-        <div id="content" class="modal-content">
-            <!-- Content will be dynamically inserted -->
-        </div>
-        <div class="modal-buttons">
-            <button id="confirmarBtn" class="btn">Confirmar</button>
-            <button id="cancelarConfirmacionBtn" class="btn btn-secondary">Cancelar</button>
-        </div>
-    </div>
+      <div class="form-group">
+        <label for="observaciones">Observaciones</label>
+        <textarea id="observaciones" rows="3" placeholder="Observaciones adicionales"></textarea>
+      </div>
 
-    <!-- Success Modal -->
-    <div id="exito" class="modal">
-        <div class="modal-content">
-            <h2>¡Ingreso Registrado!</h2>
-            <p>El ingreso de inventario se ha registrado correctamente.</p>
-            <div class="modal-buttons">
-                <button id="nuevoIngresoBtn" class="btn">Nuevo Ingreso</button>
-                <button id="volverBtn" class="btn btn-secondary">Volver al Menú</button>
-            </div>
-        </div>
+      <button type="button" id="guardarBtn" class="btn btn-primary">Guardar Ingreso</button>
+    </form>
+  </div>
+
+  <!-- Modales -->
+  <div id="confirmacion" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div id="content"></div>
+      <div class="modal-buttons">
+        <button id="confirmarBtn" class="btn btn-primary">Confirmar</button>
+        <button id="cancelarConfirmacionBtn" class="btn btn-cancel">Cancelar</button>
+      </div>
     </div>
-    <!-- Add this before the closing body tag -->
-    <div id="modalSalir" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-title">Cerrar Sesión</h2>
-            <div class="modal-body">
-                <p>¿Estás seguro que deseas cerrar sesión?</p>
-            </div>
-            <div class="modal-buttons">
-                <button id="confirmarSalirBtn" class="btn-primary">Confirmar</button>
-                <button id="cancelarSalirBtn" class="btn-cancel">Cancelar</button>
-            </div>
-        </div>
+  </div>
+
+  <div id="salir" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3 class="modal-title">¿Deseas salir del sistema?</h3>
+      <p>Se cerrará tu sesión actual y perderás los datos no guardados.</p>
+      <div class="modal-buttons">
+        <button class="btn btn-primary" id="confirmarSalirBtn">Cerrar sesión</button>
+        <button class="btn btn-cancel" id="cancelarSalirBtn">Cancelar</button>
+      </div>
     </div>
-    <script src="js/index.js"></script>
+  </div>
+
+  <script src="js/index.js"></script>
+  <script src="js/presentacion.js"></script>
 </body>
 </html>
